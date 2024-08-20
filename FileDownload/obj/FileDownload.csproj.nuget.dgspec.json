@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Sistemas-distribuidos-Juan-Carlos-Lopez-Ojeda\\Helloworld\\Helloworld.csproj": {}
+    "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Sistemas-distribuidos-Juan-Carlos-Lopez-Ojeda\\FileDownload\\FileDownload.csproj": {}
   },
   "projects": {
-    "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Sistemas-distribuidos-Juan-Carlos-Lopez-Ojeda\\Helloworld\\Helloworld.csproj": {
+    "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Sistemas-distribuidos-Juan-Carlos-Lopez-Ojeda\\FileDownload\\FileDownload.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Sistemas-distribuidos-Juan-Carlos-Lopez-Ojeda\\Helloworld\\Helloworld.csproj",
-        "projectName": "Helloworld",
-        "projectPath": "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Sistemas-distribuidos-Juan-Carlos-Lopez-Ojeda\\Helloworld\\Helloworld.csproj",
+        "projectUniqueName": "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Sistemas-distribuidos-Juan-Carlos-Lopez-Ojeda\\FileDownload\\FileDownload.csproj",
+        "projectName": "FileDownload",
+        "projectPath": "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Sistemas-distribuidos-Juan-Carlos-Lopez-Ojeda\\FileDownload\\FileDownload.csproj",
         "packagesPath": "C:\\Users\\juanc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Sistemas-distribuidos-Juan-Carlos-Lopez-Ojeda\\Helloworld\\obj\\",
+        "outputPath": "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Sistemas-distribuidos-Juan-Carlos-Lopez-Ojeda\\FileDownload\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\juanc\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -42,16 +42,6 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "dependencies": {
-            "Microsoft.AspNetCore.OpenApi": {
-              "target": "Package",
-              "version": "[8.0.7, )"
-            },
-            "Swashbuckle.AspNetCore": {
-              "target": "Package",
-              "version": "[6.4.0, )"
-            }
-          },
           "imports": [
             "net461",
             "net462",
@@ -64,9 +54,6 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
-            "Microsoft.AspNetCore.App": {
-              "privateAssets": "none"
-            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
