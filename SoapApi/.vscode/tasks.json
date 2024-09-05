@@ -81,7 +81,7 @@
                 "docker-build: debug"
             ],
             "dockerRun": {
-                "env": {"ConnectionStrings__DefaultConnection": "Server=host.docker.internal;Database=DistributedSystems;User Id=sa; Password=Juan123!;Trust Server Certificate=True;"},
+                "env": {"ConnectionStrings__DefaultConnection": "Server=host.docker.internal;Database=DistributedSystems;User Id=sa; Password=Juan1234!;Trust Server Certificate=True;"},
                 "ports": [{"hostPort": 8090, "containerPort": 8080}]
             },
             "netCore": {

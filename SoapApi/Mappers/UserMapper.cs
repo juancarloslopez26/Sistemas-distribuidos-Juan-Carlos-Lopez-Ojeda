@@ -26,4 +26,21 @@ public static class UserMapper{
             BirthDate = user.BirthDate
         };
     }
+    public static UserEntity ToEntity(this UserModel user){
+        return new UserEntity{
+            Id = user.Id,
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Birthday = user.BirthDate
+        };
+    }
+  public static UserModel ToModel(this UserCreateRequestDto user){
+        return new UserModel{
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            BirthDate = DateTime.UtcNow
+        };
+    }
 }
