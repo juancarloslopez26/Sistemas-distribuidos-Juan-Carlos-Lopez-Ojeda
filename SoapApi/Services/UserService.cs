@@ -55,16 +55,9 @@ public class UserService : IUserContract{
         throw new FaultException("User not found");
     }
 
-    public async Task<UserResponseDto> UpdateUser(UserUpdateRequestDto user, CancellationToken cancellationToken)
+    public Task<UserResponseDto> UpdateUser(UserUpdateRequestDto user, CancellationToken cancellationToken)
     {
-        var existingUser = await _userRepository.UserUpdateRequestDto(user, cancellationToken);
-        if (existingUser is null)
-        {
-            throw new FaultException("User not found");
-        }
-        existingUser.UpdateRequestDtos(user);
-        var updatedUser = await _userRepository.UpdateAsync(existingUser, cancellationToken);
-
-        return updatedUser.ToDto();
+        throw new NotImplementedException();
     }
 }
+    
