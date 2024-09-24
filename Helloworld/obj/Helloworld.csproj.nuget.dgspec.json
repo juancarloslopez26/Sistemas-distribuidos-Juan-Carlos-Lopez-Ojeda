@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Helloworld\\Helloworld.csproj": {}
+    "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Sistemas-distribuidos-Juan-Carlos-Lopez-Ojeda\\Helloworld\\Helloworld.csproj": {}
   },
   "projects": {
-    "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Helloworld\\Helloworld.csproj": {
+    "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Sistemas-distribuidos-Juan-Carlos-Lopez-Ojeda\\Helloworld\\Helloworld.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Helloworld\\Helloworld.csproj",
+        "projectUniqueName": "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Sistemas-distribuidos-Juan-Carlos-Lopez-Ojeda\\Helloworld\\Helloworld.csproj",
         "projectName": "Helloworld",
-        "projectPath": "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Helloworld\\Helloworld.csproj",
+        "projectPath": "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Sistemas-distribuidos-Juan-Carlos-Lopez-Ojeda\\Helloworld\\Helloworld.csproj",
         "packagesPath": "C:\\Users\\juanc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Helloworld\\obj\\",
+        "outputPath": "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Sistemas-distribuidos-Juan-Carlos-Lopez-Ojeda\\Helloworld\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\juanc\\AppData\\Roaming\\NuGet\\NuGet.Config"
