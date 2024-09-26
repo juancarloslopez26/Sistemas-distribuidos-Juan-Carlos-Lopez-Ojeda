@@ -1,3 +1,4 @@
+using RestApi.Exceptions;
 using RestApi.Models;
 using RestApi.Repositories;
 
@@ -12,21 +13,15 @@ public class GroupService : IGroupService
         _userRepository = userRepository;
     }
 
-    public async Task<GroupUserModel> CreateGroupAsync(GroupUserModel newGroup, CancellationToken cancellationToken)
-{
-    
-    var createdGroup = new GroupUserModel
+    public async Task DeleteGroupByIdAsync(string id, CancellationToken cancellationToken)
     {
-        Id = Guid.NewGuid().ToString(),
-        Name = newGroup.Name,
-        CreationDate = DateTime.UtcNow,
-        Users = newGroup.Users
-    };
+        var group = await _groupRepository.GetByIdAsync(id, cancellationToken);
+        if(group is null){
+            throw new GroupNotFoundException();
+        }
 
-
-    return createdGroup; 
-}
-
+        await _groupRepository.DeleteByIdAsync(id, cancellationToken);
+    }
 
     public async Task<GroupUserModel> GetGroupByIdAsync(string Id, CancellationToken cancellationToken)
     {
@@ -43,30 +38,55 @@ public class GroupService : IGroupService
         };
     }
 
-    public Task<GroupUserModel> GetGroupByIdAsync(GroupUserModel newGroup, string Id, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
 
-    public async Task<IEnumerable<GroupUserModel>> GetGroupsByNameAsync(string name, CancellationToken cancellationToken) // Nuevo método
+    //paginacion tarea*
+
+    public async Task<IEnumerable<GroupUserModel>> GetGroupsByNameAsync(string name, int pageIndex, int pageSize, string orderBy, CancellationToken cancellationToken)
     {
         var groups = await _groupRepository.GetByNameAsync(name, cancellationToken);
-        return groups.Select(group => new GroupUserModel
+
+        var groupUserModels = await Task.WhenAll(groups.Select(async group => 
         {
+            var users = await Task.WhenAll(group.Users.Select(userId => _userRepository.GetByIdAsync(userId, cancellationToken)));
+            return new GroupUserModel
+            {
+                Id = group.Id,
+                Name = group.Name,
+                CreationDate = group.CreationDate,
+                Users = users.Where(user => user != null).ToList()
+            };
+        }));
+
+        var orderedGroups = orderBy switch
+        {
+            "name" => groupUserModels.OrderBy(g => g.Name),
+            "creationDate" => groupUserModels.OrderBy(g => g.CreationDate),
+            _ => groupUserModels.OrderBy(g => g.Name)
+        };
+
+        return orderedGroups
+            .Skip((pageIndex - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+    }
+
+    public async Task<GroupUserModel> CreateGroupAsync(string name, Guid[] users, CancellationToken cancellationToken)
+    {
+        if(users.Length == 0){
+            throw new InvalidGroupRequestFormatException();
+        }
+
+        var groups = await _groupRepository.GetByNameAsync(name, cancellationToken);
+        if(groups.Any()){
+            throw new GroupAlreadyExistsExceptions();
+        }
+        var group = await _groupRepository.CreateAsync(name, users, cancellationToken);
+        return new GroupUserModel{
             Id = group.Id,
             Name = group.Name,
             CreationDate = group.CreationDate,
-             Users = new List<UserModel>() 
-        });
-    }
+            Users = (await Task.WhenAll(group.Users.Select(userId => _userRepository.GetByIdAsync(userId, cancellationToken)))).Where(user => user !=null).ToList()
 
-    public Task PatchGroupAsync(string id, GroupUserModel partialUpdateGroup, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
-    Task IGroupService.CreateGroupAsync(GroupUserModel newGroup, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
+        };
     }
 }

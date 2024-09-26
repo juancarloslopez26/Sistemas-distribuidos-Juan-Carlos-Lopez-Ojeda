@@ -1,7 +1,11 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using RestApi.Dtos;
 using RestApi.Services;
 using RestApi.Mappers;
-using RestApi.Models;
+using RestApi.Exceptions;
+using Microsoft.AspNetCore.Components.Web;
+using System.Net;
 
 namespace RestApi.Controllers;
 
@@ -10,133 +14,104 @@ namespace RestApi.Controllers;
 public class GroupsController : ControllerBase
 {
     private readonly IGroupService _groupService;
-
     public GroupsController(IGroupService groupService)
     {
         _groupService = groupService;
     }
-
     [HttpGet("{id}")]
-    public async Task<ActionResult<GroupUserModel>> GetGroupById(string id, CancellationToken cancellationToken)
+    public async Task<ActionResult<GroupResponse>> GetGroupById(string Id, CancellationToken cancellationToken)
     {
-        var group = await _groupService.GetGroupByIdAsync(id, cancellationToken);
-        if (group is null)
+        var group = await _groupService.GetGroupByIdAsync(Id, cancellationToken);
+        if(group is null)
         {
             return NotFound();
         }
-
-        return Ok(group);
+        return Ok(group.ToDto());
     }
+    //localhost/groups
+    //GET localhost/groups/ID
+        //200 - retornamos el objeto
+        //404 - no existe el objeto
+        //400 (bad request) - error del cliente
+    //PAGINACIÓN
+    //GET ALL localhost/groups?name=8uudsfjakfads98f
+        // 200 - retornar el listado de objetos
+        // 200 - retornar el listado vacío
+        // 400 - Algun campo del query parameter es invalido
+    //DELETE localhost/groups/Id
+        // 404 - no existe el recurso (Opcional)
+        // 204 - No Content
+    //POST localhost/groups {sajdkfj}
+        // 400 - bad request
+        // 409 - conflict (name != name)
+        // 201 - Created (response del objeto con el nuevo Id)
+    //PUT localhost/group/id {skdfj} -- Siempre mandas todos los campos
+        // 400 - bad request
+        // 409 - conflict
+        // 200 - response del objeto actualizado
+        // 204 - sin response
+    //PATCH
+        // 400 - bad request
+        // 409 - conflict
+        // 200 - response del objeto actualizado
+        // 204 - sin response
 
-    // Endpoint para obtener grupos por nombre, con paginación y ordenamiento
+
+    //Paginación tarea*
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<GroupUserModel>>> GetGroupsByName(
+    public async Task<ActionResult<IEnumerable<GroupResponse>>> GetGroupsByName(
         [FromQuery] string name, 
         [FromQuery] int pageIndex, 
-        [FromQuery] int pageSize,
-        [FromQuery] string orderBy , // Parámetro para ordenamiento
+        [FromQuery] int pageSize, 
+        [FromQuery] string orderBy,
         CancellationToken cancellationToken)
     {
-        var groups = await _groupService.GetGroupsByNameAsync(name, cancellationToken);
-
-        // Ordenar los grupos según el parámetro 'orderBy'
-        var orderedGroups = orderBy switch
+        var groups = await _groupService.GetGroupsByNameAsync(name, pageIndex, pageSize, orderBy, cancellationToken);
+        
+        if(groups == null || !groups.Any())
         {
-            "Name" => groups.OrderBy(g => g.Name),
-            "CreationDate" => groups.OrderBy(g => g.CreationDate),
-            _ => groups.OrderBy(g => g.CreationDate) // Orden predeterminado
-        };
+            return Ok(new List<GroupResponse>());
+        }
 
-        // Aplicar paginación
-        var pagedGroups = orderedGroups
-            .Skip(pageIndex * pageSize)
-            .Take(pageSize)
-            .ToList();
-
-        // Devolver la lista de grupos paginados y ordenados
-        return Ok(pagedGroups);
+        return Ok(groups.Select(group => group.ToDto()));
     }
-
-    // DELETE localhost/groups/{id}
+    
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteGroup(string id, CancellationToken cancellationToken)
-    {
-        var group = await _groupService.GetGroupByIdAsync(id, cancellationToken);
-        if (group is null)
-        {
+    public async Task<IActionResult> DeleteGroup(string id, CancellationToken cancellationToken){
+        try{
+            await _groupService.DeleteGroupByIdAsync(id, cancellationToken);
+            return NoContent();
+        }catch(GroupNotFoundException){
             return NotFound();
         }
-
-        // Lógica para eliminar el grupo, si aplica, en el servicio.
-        // Ejemplo: await _groupService.DeleteGroupByIdAsync(id, cancellationToken);
-
-        return NoContent();
     }
-
-    // POST localhost/groups
     [HttpPost]
-    public async Task<IActionResult> CreateGroup([FromBody] GroupUserModel newGroup, CancellationToken cancellationToken)
+    public async Task<ActionResult<GroupResponse>> CreateGroup([FromBody]CreateGroupRequest groupRequest, CancellationToken cancellationToken){
     {
-        if (!ModelState.IsValid)
+        try
         {
-            return BadRequest(ModelState);
+            var group = await _groupService.CreateGroupAsync(groupRequest.Name, groupRequest.Users, cancellationToken);
+            return CreatedAtAction(nameof(GetGroupById), new {id = group.Id}, group.ToDto());
         }
-
-        var createdGroup = await _groupService.CreateGroupAsync(newGroup, cancellationToken);
-
-        if (createdGroup is null)
+        catch (InvalidGroupRequestFormatException)
         {
-            return Conflict("A group with the same name already exists.");
+           return BadRequest(NewValidationProblemDetails("One or more validation errors occured.", HttpStatusCode.BadRequest, new Dictionary<string, string[]>{
+                {"Groups", ["Users array is empy"]}
+            }));
+           
         }
-
-        return CreatedAtAction(nameof(GetGroupById), new { id = createdGroup.Id }, createdGroup);
+        catch(GroupAlreadyExistsException){
+            return Conflict(NewValidationProblemDetails("One or more validation errors occured.", HttpStatusCode.BadRequest, new Dictionary<string, string[]>{
+                {"Groups", ["Group whit same name already exist"]}
+            }));
+        }
     }
-
-    // PUT localhost/groups/{id}
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateGroup(string id, [FromBody] GroupUserModel updatedGroup, CancellationToken cancellationToken)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        var existingGroup = await _groupService.GetGroupByIdAsync(id, cancellationToken);
-        if (existingGroup is null)
-        {
-            return NotFound();
-        }
-
-        var result = await _groupService.UpdateGroupAsync(id, updatedGroup, cancellationToken);
-        if (result is null)
-        {
-            return Conflict("A conflict occurred while updating the group.");
-        }
-
-        return Ok(result);
     }
-
-    // PATCH localhost/groups/{id}
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> PatchGroup(string id, [FromBody] GroupUserModel partialUpdateGroup, CancellationToken cancellationToken)
-    {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
-        var existingGroup = await _groupService.GetGroupByIdAsync(id, cancellationToken);
-        if (existingGroup is null)
-        {
-            return NotFound();
-        }
-
-        var result = await _groupService.PatchGroupAsync(id, partialUpdateGroup, cancellationToken);
-        if (result is null)
-        {
-            return Conflict("A conflict occurred while patching the group.");
-        }
-
-        return Ok(result);
+    private static ValidationProblemDetails NewValidationProblemDetails(string title, HttpStatusCode statusCode, Dictionary<string, string[]> errors){
+        return new ValidationProblemDetails{
+            Title = title,
+            Status = (int) statusCode,
+            Errors = errors
+        };
     }
 }
