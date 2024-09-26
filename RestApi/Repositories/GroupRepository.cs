@@ -56,12 +56,7 @@ namespace RestApi.Repositories
             return groups.Select(group => group.ToModel());
         }
 
-        // Nuevo método para obtener un grupo por nombre exacto (para validación de duplicidad)
-        public async Task<GroupModel> GetByExactNameAsync(string name, CancellationToken cancellationToken)
-        {
-            var filter = Builders<GroupEntity>.Filter.Eq(x => x.Name, name);
-            var group = await _groups.Find(filter).FirstOrDefaultAsync(cancellationToken);
-            return group?.ToModel();
-        }
+       
+        
     }
 }
