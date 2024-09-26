@@ -18,8 +18,7 @@ public class GroupService : IGroupService
     public async Task DeleteGroupByIdAsync(string id, CancellationToken cancellationToken)
     {
         var group = await _groupRepository.GetByIdAsync(id, cancellationToken);
-        if (group is null)
-        {
+
             throw new GroupNotFoundException();
         }
 
@@ -44,12 +43,12 @@ public class GroupService : IGroupService
         };
     }
 
-    // Paginación y ordenación por nombre
+
     public async Task<IEnumerable<GroupUserModel>> GetGroupsByNameAsync(string name, int pageIndex, int pageSize, string orderBy, CancellationToken cancellationToken)
     {
         var groups = await _groupRepository.GetByNameAsync(name, cancellationToken);
 
-        var groupUserModels = await Task.WhenAll(groups.Select(async group =>
+
         {
             var users = await Task.WhenAll(group.Users.Select(userId => _userRepository.GetByIdAsync(userId, cancellationToken)));
             return new GroupUserModel
@@ -76,6 +75,7 @@ public class GroupService : IGroupService
 
     public async Task<GroupUserModel> CreateGroupAsync(string name, Guid[] users, CancellationToken cancellationToken)
     {
+
         if (users.Length == 0)
         {
             throw new InvalidGroupRequestFormatException();
@@ -96,6 +96,7 @@ public class GroupService : IGroupService
             CreationDate = group.CreationDate,
             Users = (await Task.WhenAll(group.Users.Select(userId => _userRepository.GetByIdAsync(userId, cancellationToken))))
                         .Where(user => user != null).ToList()
+
         };
     }
 }

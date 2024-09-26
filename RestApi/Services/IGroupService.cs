@@ -2,6 +2,7 @@ using RestApi.Models;
 
 namespace RestApi.Services;
 
+
 public interface IGroupService
 {
     Task<GroupUserModel> GetGroupByIdAsync(string Id, CancellationToken cancellationToken);
@@ -15,3 +16,4 @@ public interface IGroupService
     // Método para crear un nuevo grupo
     Task<GroupUserModel> CreateGroupAsync(string name, Guid[] users, CancellationToken cancellationToken);
 }
+

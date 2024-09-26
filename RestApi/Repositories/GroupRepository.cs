@@ -49,6 +49,7 @@ namespace RestApi.Repositories
             }
         }
 
+
         public async Task<IEnumerable<GroupModel>> GetByNameAsync(string name, CancellationToken cancellationToken) // Búsqueda por coincidencia parcial
         {
             var filter = Builders<GroupEntity>.Filter.Regex(x => x.Name, new MongoDB.Bson.BsonRegularExpression(name, "i"));
@@ -62,5 +63,6 @@ namespace RestApi.Repositories
             var group = await _groups.Find(filter).FirstOrDefaultAsync(cancellationToken);
             return group?.ToModel();
         }
+
     }
 }
