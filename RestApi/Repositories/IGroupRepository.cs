@@ -10,6 +10,7 @@ public interface IGroupRepository{
     Task <GroupUserModel> CreateGroupAsync(string name, Guid[] users, CancellationToken cancellationToken);
 
     Task<GroupModel> CreateAsync(string name, Guid[] users, CancellationToken cancellationToken);
-    Task<GroupModel> GetByExactNameAsync(string name, CancellationToken cancellationToken);
+            Task<GroupModel> GetByExactNameAsync(string name, CancellationToken cancellationToken);
+
 
 }
