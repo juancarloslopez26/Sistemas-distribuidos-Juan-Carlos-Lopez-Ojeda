@@ -1,5 +1,5 @@
 namespace RestApi.Exceptions; 
 
-public class GroupAlreadyExistsExceptions: Exception{
+public class GroupAlreadyExistsException: Exception{
 
 }

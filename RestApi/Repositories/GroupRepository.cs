@@ -49,7 +49,7 @@ namespace RestApi.Repositories
             }
         }
 
-        public async Task<IEnumerable<GroupModel>> GetByNameAsync(string name, CancellationToken cancellationToken) // Búsqueda por coincidencia parcial
+        public async Task<IEnumerable<GroupModel>> GetByNameAsync(string name, int pageIndex, int pageSize, string orderBy, CancellationToken cancellationToken) // Búsqueda por coincidencia parcial
         {
             var filter = Builders<GroupEntity>.Filter.Regex(x => x.Name, new MongoDB.Bson.BsonRegularExpression(name, "i"));
             var groups = await _groups.Find(filter).ToListAsync(cancellationToken);
@@ -61,6 +61,21 @@ namespace RestApi.Repositories
             var filter = Builders<GroupEntity>.Filter.Eq(x => x.Name, name);
             var group = await _groups.Find(filter).FirstOrDefaultAsync(cancellationToken);
             return group?.ToModel();
+        }
+
+        public Task<GroupUserModel> CreateGroupAsync(string name, Guid[] users, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task UpdateGroupAsync(string id, string name, Guid[] users, CancellationToken cancellationToken)
+        {
+            var Filter =  Builders<GroupEntity>.Filter.Eq(x => x.Id, id);
+            var  Update = Builders<GroupEntity>.Update.Set(x => x.Name, name).Set(x => x.Users, users);
+
+            await  _groups.UpdateOneAsync(Filter, Update, cancellationToken : cancellationToken);
+            
+
         }
     }
 }

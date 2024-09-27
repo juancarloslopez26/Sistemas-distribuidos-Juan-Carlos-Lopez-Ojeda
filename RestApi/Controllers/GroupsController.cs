@@ -95,23 +95,38 @@ public class GroupsController : ControllerBase
         }
         catch (InvalidGroupRequestFormatException)
         {
-           return BadRequest(NewValidationProblemDetails("One or more validation errors occured.", HttpStatusCode.BadRequest, new Dictionary<string, string[]>{
+           return BadRequest(ValidationProblemDetails("One or more validation errors occured.", HttpStatusCode.BadRequest, new Dictionary<string, string[]>{
                 {"Groups", ["Users array is empy"]}
             }));
            
         }
         catch(GroupAlreadyExistsException){
-            return Conflict(NewValidationProblemDetails("One or more validation errors occured.", HttpStatusCode.BadRequest, new Dictionary<string, string[]>{
+            return Conflict(ValidationProblemDetails("One or more validation errors occured.", HttpStatusCode.BadRequest, new Dictionary<string, string[]>{
                 {"Groups", ["Group whit same name already exist"]}
             }));
         }
     }
     }
-    private static ValidationProblemDetails NewValidationProblemDetails(string title, HttpStatusCode statusCode, Dictionary<string, string[]> errors){
-        return new ValidationProblemDetails{
-            Title = title,
-            Status = (int) statusCode,
-            Errors = errors
-        };
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateGroup(string id, [FromBody] UpdateGroupRequest groupRequest, CancellationToken cancellationToken){
+        try{
+            await _groupService.UpdateGroupAsync(id, groupRequest.Name, groupRequest.Users, cancellationToken);
+            return NoContent(); 
+        }catch(GroupNotFoundException){
+            return NotFound();
+        }catch(InvalidGroupRequestFormatException){
+            return BadRequest(ValidationProblemDetails("One or more validation errors occured.", HttpStatusCode.BadRequest, new Dictionary<string, string[]>{
+                {"Groups", ["Users array is empy"]}
+            }));
+        }catch(GroupAlreadyExistsException){
+            return Conflict(ValidationProblemDetails("One or more validation errors occured.", HttpStatusCode.Conflict, new Dictionary<string, string[]>{
+                {"Groups", ["Group with same name already exists"]}
+            }));
+        }
+    }
+
+    private object? ValidationProblemDetails(string v, HttpStatusCode badRequest, Dictionary<string, string[]> dictionary)
+    {
+        throw new NotImplementedException();
     }
 }
