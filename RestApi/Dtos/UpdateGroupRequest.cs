@@ -1,6 +1,6 @@
 namespace RestApi.Dtos;
 
-public class CreateGroupRequest{
+public class UpdateGroupRequest{
     public string Name {get; set;}
     public Guid[] Users {get; set;}
 }
