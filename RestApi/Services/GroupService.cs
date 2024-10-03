@@ -1,3 +1,4 @@
+using RestApi.Exceptions;
 
 using RestApi.Exceptions;
 using RestApi.Models;
@@ -14,6 +15,15 @@ public class GroupService : IGroupService
         _userRepository = userRepository;
     }
 
+    public async Task DeleteGroupByIdAsync(string id, CancellationToken cancellationToken)
+    {
+        var group = await _groupRepository.GetByIdAsync(id, cancellationToken);
+        if(group is null){
+            throw new GroupNotFoundException();
+        }
+
+        await _groupRepository.DeleteByIdAsync(id, cancellationToken);
+    }
     public async Task DeleteGroupByIdAsync(string id, CancellationToken cancellationToken)
     {
         var group = await _groupRepository.GetByIdAsync(id, cancellationToken);
@@ -116,4 +126,5 @@ public class GroupService : IGroupService
                 
                 await _groupRepository.UpdateGroupAsync(id, name, users, cancellationToken);
     }
+
 }
