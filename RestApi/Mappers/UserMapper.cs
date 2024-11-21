@@ -1,20 +1,19 @@
-using RestApi.Infrastructure.Soap;
 using RestApi.Models;
+using RestApi.Infrastructure.Soap;
 
 namespace RestApi.Mappers;
 
 public static class UserMapper{
     public static UserModel ToDomain(this UserResponseDto user){
-        if(user is null){
+        if (user is null){
             return null;
         }
-
         return new UserModel{
-            Id = user.UserId,
-            FirstName = user.FirstName,
+            Id =user.UserId,
             LastName = user.LastName,
-            BirthDay = user.BirthDate,
-            Email = user.Email
+            FirstName = user.FirstName,
+            Email = user.Email,
+            Birthday= user.BirthDate
         };
     }
-} 
+}

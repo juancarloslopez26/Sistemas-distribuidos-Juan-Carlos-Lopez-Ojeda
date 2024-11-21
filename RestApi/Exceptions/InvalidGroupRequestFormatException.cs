@@ -1,5 +1,6 @@
 namespace RestApi.Exceptions;
 
-public class InvalidGroupRequestFormatException : Exception{
+public class GroupNotFoundException : Exception
+{
     
 }
