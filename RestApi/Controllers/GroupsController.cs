@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using RestApi.Dtos;
 using RestApi.Dtos;
 using RestApi.Services;
 using RestApi.Mappers;
@@ -19,17 +21,17 @@ public class GroupsController : ControllerBase
     {
         _groupService = groupService;
     }
-
     [HttpGet("{id}")]
     [Authorize(Policy="Read")]
     
     public async Task<ActionResult<GroupResponse>> GetGroupById(string id, CancellationToken cancellationToken)
     {
-        var group = await _groupService.GetGroupByIdAsync(id, cancellationToken);
-        if (group is null)
+        var group = await _groupService.GetGroupByIdAsync(Id, cancellationToken);
+        if(group is null)
         {
             return NotFound();
         }
+        return Ok(group.ToDto());
         return Ok(group.ToDto());
     }
 

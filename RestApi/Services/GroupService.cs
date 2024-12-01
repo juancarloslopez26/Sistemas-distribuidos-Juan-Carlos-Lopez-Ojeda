@@ -11,6 +11,9 @@ public class GroupService : IGroupService
 
     public GroupService(IGroupRepository groupRepository, IUserRepository userRepository)
     {
+
+    public GroupService(IGroupRepository groupRepository, IUserRepository userRepository)
+    {
         _groupRepository = groupRepository;
         _userRepository = userRepository;
     }
@@ -18,6 +21,8 @@ public class GroupService : IGroupService
     public async Task<GroupUserModel> GetGroupByIdAsync(string Id, CancellationToken cancellationToken)
     {
         var group = await _groupRepository.GetByIdAsync(Id, cancellationToken);
+        if (group is null)
+        {
         if (group is null)
         {
             return null;
