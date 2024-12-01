@@ -23,10 +23,10 @@ spec:
               value: "http://public.hydra.test/"
             - name: "Authentication_Issuer"
               value: "http://public.hydra.test/"
-            - name: "MongoBd__Groups__ConectionString"
+            - name: "MongoBdGroupsConectionString"
               valueFrom:
                 secretKeyRef:
                   name: groups-api-secrets
-                  key: conection-string  
+                  key: connection_string  
           ports:
             - containerPort: 8083

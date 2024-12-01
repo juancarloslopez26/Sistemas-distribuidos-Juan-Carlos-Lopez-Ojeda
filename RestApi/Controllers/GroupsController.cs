@@ -21,6 +21,7 @@ public class GroupsController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Policy="Read")]
     
     public async Task<ActionResult<GroupResponse>> GetGroupById(string id, CancellationToken cancellationToken)
     {
