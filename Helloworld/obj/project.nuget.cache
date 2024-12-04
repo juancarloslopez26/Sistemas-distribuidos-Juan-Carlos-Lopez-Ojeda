@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "hADrFufVGN4=",
+  "dgSpecHash": "lORNAm/0ii8=",
   "success": true,
-  "projectFilePath": "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Helloworld\\Helloworld.csproj",
+  "projectFilePath": "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Sistemas-distribuidos-Juan-Carlos-Lopez-Ojeda\\Helloworld\\Helloworld.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\juanc\\.nuget\\packages\\microsoft.aspnetcore.openapi\\8.0.7\\microsoft.aspnetcore.openapi.8.0.7.nupkg.sha512",
     "C:\\Users\\juanc\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
