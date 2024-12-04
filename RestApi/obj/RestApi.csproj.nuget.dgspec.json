@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Sistemas-distribuidos-Juan-Carlos-Lopez-Ojeda\\RestApi\\RestApi.csproj": {}
+    "C:\\Users\\domin\\OneDrive\\Documentos\\Uni\\SistemasDistribuidos\\SistemasDistribuidos_DominguezMorenoOsvaldo\\RestApi\\RestApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Sistemas-distribuidos-Juan-Carlos-Lopez-Ojeda\\RestApi\\RestApi.csproj": {
+    "C:\\Users\\domin\\OneDrive\\Documentos\\Uni\\SistemasDistribuidos\\SistemasDistribuidos_DominguezMorenoOsvaldo\\RestApi\\RestApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Sistemas-distribuidos-Juan-Carlos-Lopez-Ojeda\\RestApi\\RestApi.csproj",
+        "projectUniqueName": "C:\\Users\\domin\\OneDrive\\Documentos\\Uni\\SistemasDistribuidos\\SistemasDistribuidos_DominguezMorenoOsvaldo\\RestApi\\RestApi.csproj",
         "projectName": "RestApi",
-        "projectPath": "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Sistemas-distribuidos-Juan-Carlos-Lopez-Ojeda\\RestApi\\RestApi.csproj",
-        "packagesPath": "C:\\Users\\juanc\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\juanc\\Documents\\Uaq trabajos\\Sistemas distribuidos\\Sistemas-distribuidos-Juan-Carlos-Lopez-Ojeda\\RestApi\\obj\\",
+        "projectPath": "C:\\Users\\domin\\OneDrive\\Documentos\\Uni\\SistemasDistribuidos\\SistemasDistribuidos_DominguezMorenoOsvaldo\\RestApi\\RestApi.csproj",
+        "packagesPath": "C:\\Users\\domin\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\domin\\OneDrive\\Documentos\\Uni\\SistemasDistribuidos\\SistemasDistribuidos_DominguezMorenoOsvaldo\\RestApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\juanc\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\domin\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
