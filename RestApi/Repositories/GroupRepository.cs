@@ -1,16 +1,19 @@
 using MongoDB.Bson;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using RestApi.Infrastructure.Mongo;
 using RestApi.Mappers;
 using RestApi.Models;
+using MongoDB.Bson;
+using System.Text.RegularExpressions;
 
 namespace RestApi.Repositories
 {
     public class GroupRepository : IGroupRepository
     {
         private readonly IMongoCollection<GroupEntity> _groups;
+        
 
+    
         public GroupRepository(IMongoClient mongoClient, IConfiguration configuration)
         {
             var database = mongoClient.GetDatabase(configuration.GetValue<string>("MongoDb:Groups:DatabaseName"));
@@ -19,20 +22,19 @@ namespace RestApi.Repositories
 
         public async Task<GroupModel> CreateAsync(string name, Guid[] users, CancellationToken cancellationToken)
         {
-            var group = new GroupEntity
-            {
+            var group = new GroupEntity{
                 Name = name,
                 Users = users,
                 CreatedAt = DateTime.UtcNow,
                 Id = ObjectId.GenerateNewId().ToString()
             };
-            await _groups.InsertOneAsync(group, new InsertOneOptions(), cancellationToken);
+            await _groups.InsertOneAsync(group, new InsertOneOptions(),cancellationToken);
             return group.ToModel();
         }
 
         public async Task DeleteByIdAsync(string id, CancellationToken cancellationToken)
         {
-            var filter = Builders<GroupEntity>.Filter.Eq(s => s.Id, id);
+            var filter =Builders<GroupEntity>.Filter.Eq(s => s.Id, id);
             await _groups.DeleteOneAsync(filter, cancellationToken);
         }
 
@@ -42,7 +44,7 @@ namespace RestApi.Repositories
             {
                 var filter = Builders<GroupEntity>.Filter.Eq(x => x.Id, Id);
                 var group = await _groups.Find(filter).FirstOrDefaultAsync(cancellationToken);
-                return group?.ToModel();
+                return group.ToModel();
             }
             catch (FormatException)
             {
@@ -50,33 +52,51 @@ namespace RestApi.Repositories
             }
         }
 
-        public async Task<IEnumerable<GroupModel>> GetByNameAsync(string name, int pageIndex, int pageSize, string orderBy, CancellationToken cancellationToken) // Búsqueda por coincidencia parcial
+        public async Task<IEnumerable<GroupModel>> GetByNameAsync(string name, CancellationToken cancellationToken)
         {
-            var filter = Builders<GroupEntity>.Filter.Regex(x => x.Name, new MongoDB.Bson.BsonRegularExpression(name, "i"));
+            var filter = Builders<GroupEntity>.Filter.Regex(x => x.Name, new BsonRegularExpression(name, "i")); // Búsqueda por coincidencia parcial
             var groups = await _groups.Find(filter).ToListAsync(cancellationToken);
             return groups.Select(group => group.ToModel());
         }
 
-                public async Task<GroupModel> GetByExactNameAsync(string name, CancellationToken cancellationToken)
+        public async Task<List<GroupModel>> GetGroupsByNameAsync(
+    string name, 
+    int pageIndex, 
+    int pageSize, 
+    string orderBy, 
+    CancellationToken cancellationToken)
+{
+    var filter = Builders<GroupEntity>.Filter.Regex(g => g.Name, new BsonRegularExpression(name, "i")); // Usar GroupEntity aquí
+
+    var sortDefinition = orderBy switch
+    {
+        "name" => Builders<GroupEntity>.Sort.Ascending(g => g.Name), // Cambiar a GroupEntity
+        "creationDate" => Builders<GroupEntity>.Sort.Ascending(g => g.CreatedAt), // Cambiar a GroupEntity
+        _ => Builders<GroupEntity>.Sort.Ascending(g => g.Name) // Ordenar por defecto por nombre
+    };
+
+    var groups = await _groups
+        .Find(filter)
+        .Sort(sortDefinition)
+        .Skip((pageIndex - 1) * pageSize) 
+        .Limit(pageSize)
+        .ToListAsync(cancellationToken);
+
+    return groups.Select(g => g.ToModel()).ToList(); 
+}
+        public async Task<GroupModel> GetGroupByExactNameAsync(string name, CancellationToken cancellationToken)
         {
-            var filter = Builders<GroupEntity>.Filter.Eq(x => x.Name, name);
+            var filter = Builders<GroupEntity>.Filter.Eq(x => x.Name, name); // Búsqueda exacta por nombre
             var group = await _groups.Find(filter).FirstOrDefaultAsync(cancellationToken);
             return group?.ToModel();
         }
 
-        public Task<GroupUserModel> CreateGroupAsync(string name, Guid[] users, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task UpdateGroupAsync(string id, string name, Guid[] users, CancellationToken cancellationToken)
         {
-            var Filter =  Builders<GroupEntity>.Filter.Eq(x => x.Id, id);
-            var  Update = Builders<GroupEntity>.Update.Set(x => x.Name, name).Set(x => x.Users, users);
-
-            await  _groups.UpdateOneAsync(Filter, Update, cancellationToken : cancellationToken);
-            
+            var filter = Builders<GroupEntity>.Filter.Eq(x=> x.Id, id);
+            var update = Builders<GroupEntity>.Update.Set(s => s.Name, name);
+            await _groups.UpdateOneAsync(filter, update, cancellationToken : cancellationToken);
 
         }
     }
-}
+    }

@@ -9,16 +9,8 @@ public static class GroupMapper{
         return new GroupResponse{
             Id = group.Id,
             Name = group.Name,
-            CreationDate = group.CreationDate,
-            Users = group.Users.ToDto()
+            CreationDate = group.CreationDate
         };
-    }
-    public static List<UserResponse> ToDto(this IEnumerable<UserModel> users){
-        return users.Select(s => new UserResponse{
-            Id = s.Id,
-            Name = s.FirstName + " " + s.LastName,
-            Email = s.Email
-        }).ToList();
     }
     public static GroupModel ToModel(this GroupEntity group){
         if(group is null){
@@ -31,4 +23,13 @@ public static class GroupMapper{
             CreationDate = group.CreatedAt
         };
     }
+    public static GroupResponse ToDto(this GroupModel group)
+{
+    return new GroupResponse
+    {
+        Id = group.Id,
+        Name = group.Name,
+        CreationDate = group.CreationDate
+    };
+}
 }
