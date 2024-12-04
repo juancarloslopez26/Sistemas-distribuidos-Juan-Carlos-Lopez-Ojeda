@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RestApi.Dtos;
 using RestApi.Dtos;
@@ -26,6 +27,8 @@ public class GroupsController : ControllerBase
     
     public async Task<ActionResult<GroupResponse>> GetGroupById(string id, CancellationToken cancellationToken)
     {
+        var group = await _groupService.GetGroupByIdAsync(Id, cancellationToken);
+        if(group is null)
         var group = await _groupService.GetGroupByIdAsync(Id, cancellationToken);
         if(group is null)
         {

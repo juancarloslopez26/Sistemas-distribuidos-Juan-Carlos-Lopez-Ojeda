@@ -1,4 +1,5 @@
 using MongoDB.Bson;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using RestApi.Infrastructure.Mongo;
 using RestApi.Mappers;

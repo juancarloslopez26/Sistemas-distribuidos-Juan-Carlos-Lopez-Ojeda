@@ -1,5 +1,7 @@
 namespace RestApi.Dtos;
 
+namespace RestApi.Dtos;
+
 public class UserResponse{
 <<<<<<< HEAD
     public Guid Id{get; set;}
