@@ -4,6 +4,7 @@ using RestApi.Infrastructure.Mongo;
 using RestApi.Mappers;
 using RestApi.Models;
 
+
 namespace RestApi.Repositories;
 
 public class GroupRepository : IGroupRepository
@@ -51,3 +52,4 @@ public class GroupRepository : IGroupRepository
     }
     
 }
+
